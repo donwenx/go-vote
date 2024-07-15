@@ -11,7 +11,7 @@ type PlayerController struct{}
 
 func (p PlayerController) GetPlayers(c *gin.Context) {
 	aidStr := c.DefaultPostForm("aid", "0")
-	aid, _ := strconv.Atoi(aidStr)
+	aid, _ := strconv.ParseInt(aidStr, 10, 64)
 
 	res, err := models.GetPlayers(aid)
 	if err != nil {
@@ -23,7 +23,7 @@ func (p PlayerController) GetPlayers(c *gin.Context) {
 
 func (p PlayerController) CreatePlayers(c *gin.Context) {
 	aidStr := c.DefaultPostForm("aid", "0")
-	aid, _ := strconv.Atoi(aidStr)
+	aid, _ := strconv.ParseInt(aidStr, 10, 64)
 	ref := c.DefaultPostForm("ref", "")
 	nickname := c.DefaultPostForm("nickname", "")
 	declaration := c.DefaultPostForm("declaration", "")

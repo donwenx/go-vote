@@ -23,6 +23,13 @@ func GetUserInfoByUsername(username string) (User, error) {
 	return user, err
 }
 
+// 根据id查user info
+func GetUserInfo(id int64) (User, error) {
+	var user User
+	err := dao.Db.Where("id = ?", id).Find(&user).Error
+	return user, err
+}
+
 func AddUser(username string, password string) (int64, error) {
 	user := User{Username: username, Password: password, CreateTime: time.Now().Unix(), UpdateTime: time.Now().Unix()}
 	err := dao.Db.Create(&user).Error

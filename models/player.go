@@ -1,6 +1,10 @@
 package models
 
-import "vote/dao"
+import (
+	"vote/dao"
+
+	"gorm.io/gorm"
+)
 
 type Player struct {
 	Id          int64  `json:"id"`
@@ -16,14 +20,25 @@ func (Player) TableName() string {
 	return "player"
 }
 
-func GetPlayers(aid int) ([]Player, error) {
+func CreatePlayer(aid int64, ref string, nickname string, declaration string, avatar string) (Player, error) {
+	player := Player{Aid: aid, Ref: ref, Nickname: nickname, Declaration: declaration, Avatar: avatar}
+	err := dao.Db.Create(&player).Error
+	return player, err
+}
+
+func GetPlayers(aid int64) ([]Player, error) {
 	var players []Player
 	err := dao.Db.Where("aid = ?", aid).Find(&players).Error
 	return players, err
 }
 
-func CreatePlayer(aid int64, ref string, nickname string, declaration string, avatar string) (Player, error) {
-	player := Player{Aid: aid, Ref: ref, Nickname: nickname, Declaration: declaration, Avatar: avatar}
-	err := dao.Db.Create(&player).Error
-	return player, err
+func GetPlayerInfo(id int64) (Player, error) {
+	var Player Player
+	err := dao.Db.Where("id = ?", id).Find(&Player).Error
+	return Player, err
+}
+
+func UpdatePlayerScore(id int64) {
+	var player Player
+	dao.Db.Model(&player).Where("id = ?", id).UpdateColumn("score", gorm.Expr("score + ?", 1))
 }
