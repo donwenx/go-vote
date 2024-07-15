@@ -26,9 +26,9 @@ func CreatePlayer(aid int64, ref string, nickname string, declaration string, av
 	return player, err
 }
 
-func GetPlayers(aid int64) ([]Player, error) {
+func GetPlayers(aid int64, sort string) ([]Player, error) {
 	var players []Player
-	err := dao.Db.Where("aid = ?", aid).Find(&players).Error
+	err := dao.Db.Where("aid = ?", aid).Order(sort).Find(&players).Error
 	return players, err
 }
 

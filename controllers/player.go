@@ -13,7 +13,19 @@ func (p PlayerController) GetPlayers(c *gin.Context) {
 	aidStr := c.DefaultPostForm("aid", "0")
 	aid, _ := strconv.ParseInt(aidStr, 10, 64)
 
-	res, err := models.GetPlayers(aid)
+	res, err := models.GetPlayers(aid, "id asc")
+	if err != nil {
+		ReturnError(c, 4001, "没有相关信息")
+		return
+	}
+	ReturnSuccess(c, 0, "success", res, 1)
+}
+
+func (p PlayerController) GetRanking(c *gin.Context) {
+	aidStr := c.DefaultPostForm("aid", "0")
+	aid, _ := strconv.ParseInt(aidStr, 10, 64)
+
+	res, err := models.GetPlayers(aid, "score desc")
 	if err != nil {
 		ReturnError(c, 4001, "没有相关信息")
 		return
