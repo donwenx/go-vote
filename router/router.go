@@ -1,7 +1,7 @@
 package router
 
 import (
-	"net/http"
+	"vote/controllers"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,9 +12,7 @@ func Router() *gin.Engine {
 	// 用户
 	user := router.Group("/user")
 	{
-		user.GET("/", func(c *gin.Context) {
-			c.String(http.StatusOK, "test01")
-		})
+		user.POST("/register", controllers.UserController{}.Register)
 	}
 	return router
 }

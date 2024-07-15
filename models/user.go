@@ -1,5 +1,10 @@
 package models
 
+import (
+	"time"
+	"vote/dao"
+)
+
 type User struct {
 	Id         int64  `json:"id"`
 	Username   string `json:"username"`
@@ -10,4 +15,16 @@ type User struct {
 
 func (User) TableName() string {
 	return "user"
+}
+
+func GetUserInfoByUsername(username string) (User, error) {
+	var user User
+	err := dao.Db.Where("username = ?", username).First(&user).Error
+	return user, err
+}
+
+func AddUser(username string, password string) (int64, error) {
+	user := User{Username: username, Password: password, CreateTime: time.Now().Unix(), UpdateTime: time.Now().Unix()}
+	err := dao.Db.Create(&user).Error
+	return user.Id, err
 }
